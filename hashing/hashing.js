@@ -1,6 +1,7 @@
 "use strict";
 
 var crypto = require("crypto");
+const { basename } = require("path");
 
 // The Power of a Smile
 // by Tupac Shakur
@@ -40,7 +41,8 @@ for (let line of poem) {
 	i++;
 }
 
-//console.log(`Blockchain is valid: ${verifyChain(Blockchain)}`);
+console.log(Blockchain);
+
 
 
 // **********************************
@@ -51,4 +53,30 @@ function blockHash(bl) {
 	).digest("hex");
 }
 
-console.log(Blockchain);
+const verifyBlock = bl => {
+	if (bl.data && bl.index >= 0) {
+		if (bl.hash == "000000") {
+			return true;
+		}
+		else if (bl.prevHash && bl.hash == blockHash(bl)) {
+		return true;
+	}
+} }
+
+let checker = arr => arr.every(v => v === true); //checks if all elements of an array are true
+
+const verifyChain = bc => {
+	let res = []
+	for (let i = 0;i < bc.blocks.length;i++) {
+		if (i >= 1) {
+			if (bc.blocks[i].prevHash == bc.blocks[i - 1].hash){
+				res[i] = verifyBlock(bc.blocks[i]);	
+		}
+		else res[i] = verifyBlock(bc.blocks[i]);
+	} }
+	if (checker(res)){
+		return 'Yes';
+		}
+	else return 'No';
+}
+console.log(`Blockchain is valid: ${verifyChain(Blockchain)}`);
