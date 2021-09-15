@@ -33,7 +33,7 @@ let i = 1;
 for (let line of poem) {
 	Blockchain.blocks[i] = {
 		index: i,
-		prevHash: Blockchain.blocks[i - 1],
+		prevHash: Blockchain.blocks[i - 1].hash,
 		data: line,
 		timestamp: Date.now(),
 	}
@@ -54,11 +54,11 @@ function blockHash(bl) {
 }
 
 const verifyBlock = bl => {
-	if (bl.data && bl.index >= 0) {
+	if (bl.index >= 0) {
 		if (bl.hash == "000000") {
 			return true;
 		}
-		else if (bl.prevHash && bl.hash == blockHash(bl)) {
+		else if (bl.data && bl.prevHash && bl.hash == blockHash(bl)) {
 		return true;
 	}
 } }
@@ -72,8 +72,9 @@ const verifyChain = bc => {
 			if (bc.blocks[i].prevHash == bc.blocks[i - 1].hash){
 				res[i] = verifyBlock(bc.blocks[i]);	
 		}
-		else res[i] = verifyBlock(bc.blocks[i]);
-	} }
+		//else res[i] = verifyBlock(bc.blocks[i]);
+	} else res[i] = verifyBlock(bc.blocks[i]);}
+	console.log(res);
 	if (checker(res)){
 		return 'Yes';
 		}
